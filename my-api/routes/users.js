@@ -1,9 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+const { getAllUsers } = require('../mysql/get/users');
+
+/* POST users listing. */
+router.post('/', async function(req, res, next) {
+    console.log(req.body);
+
+    let users = await getAllUsers();
+
+    //res.header("Access-Controll-Allow-Origin", 'http://localhost:5173');
+    res.json(data);
 });
 
 module.exports = router;

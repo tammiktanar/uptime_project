@@ -6,7 +6,7 @@
     export let data
 
 
-    $: isLoggedIn = !$user === null ? false : true;
+    $: isLoggedIn = $user === null ? false : true;
 
     function logout() {
         //user.update(val = > val = null)
