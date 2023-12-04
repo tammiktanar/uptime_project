@@ -5,6 +5,12 @@
     
     export let data: Data
 
+    let seperatedData: Data = {
+        id: data.id,
+        validUntil: data.validUntil,
+        legs: []
+    }
+
     let startPlanet = ""
     let endPlanet = ""
 
@@ -19,6 +25,25 @@
     let excludeCompanies: string[] = []
  
     let calcPaths: Route[][] = []
+
+
+    function seperateAllCompaniesIntoSeperatePaths() {
+
+
+        data.legs.forEach((route:Route) => {
+            let seperatedRoute:Route = {
+                id: route.id,
+                routeInfo: route.routeInfo,
+                providers: []
+            }
+
+            route.providers.forEach((provider:Provider) => {
+                seperatedRoute.providers = []
+                seperatedRoute.providers.push(provider)
+                seperatedData.legs.push(seperatedRoute)
+            })
+        })
+    }
 
     function companySort(company_a: Company, company_b: Company) {
         if (company_a.name > company_b.name) {
@@ -45,7 +70,7 @@
     }
 
     function findAllAvailablePlanets() {
-        data.legs.forEach((route: Route) => {
+        seperatedData.legs.forEach((route: Route) => {
             let cur_from_planet = route.routeInfo.from.name
             let cur_to_planet = route.routeInfo.to.name
 
@@ -63,7 +88,7 @@
     }
 
     function findAllAvailableCompanies() {
-        data.legs.forEach((route: Route) => {
+        seperatedData.legs.forEach((route: Route) => {
             route.providers.forEach((provider: Provider) => {
                 if (!allCompanies.some(company => company.name == provider.company.name)) {
                     allCompanies.push(provider.company)
@@ -127,7 +152,7 @@
     function getRoutesWithStartOf(start: String, excludedRoutes: Route[]) {
         let res: Route[] = []
 
-        data.legs.forEach(route => {
+        seperatedData.legs.forEach(route => {
             if (!excludedRoutes.some(check_route => check_route.routeInfo.id == route.routeInfo.id)) {
                 if (route.routeInfo.from.name == start) {
                     res.push(route)
@@ -187,8 +212,10 @@
 
 
     $:[startPlanet, endPlanet, excludeCompanies], startCalculatePossiblePaths();
+    seperateAllCompaniesIntoSeperatePaths()
     findAllAvailablePlanets()
     findAllAvailableCompanies()
+    console.log(seperatedData)
 </script>
 
 <div class="bg-secondary rounded rounded-3 p-2  text-light">
