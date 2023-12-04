@@ -8,6 +8,8 @@ const { getUserWithEmail } = require('../mysql/get/users');
 /* POST users listing. */
 router.post('/', async function(req, res, next) {
     console.log(req.body);
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5173')
+    res.header("Access-Control-Allow-Credentials", "true")
 
     if (!req.body.email) {
         res.status(500).json({success: false, error: true, message: "Missing email", data: req.body})
@@ -36,7 +38,7 @@ router.post('/', async function(req, res, next) {
                 return
             }
 
-            const token = jwt.sign({id:user.id}, process.env.SECRET, {expiresIn: '24h'});
+            const token = jwt.sign({id:user.id}, process.env.PRIVATE_SECRET, {expiresIn: '24h'});
             res.cookie('token', token, {httpOnly: true, maxAge: (24 * 60 * 60 * 1000)});
 
             res.send({success: true, error: false, message: "User logged in", data: null})

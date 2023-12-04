@@ -8,6 +8,8 @@ const { registerUser } = require('../mysql/create/users');
 /* POST users listing. */
 router.post('/', async function(req, res, next) {
     console.log(req.body);
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5173')
+    res.header("Access-Control-Allow-Credentials", "true")
 
     if (!req.body.username) {
         res.status(500).json({success: false, error: true, message: "Missing username", data: req.body})

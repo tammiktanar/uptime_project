@@ -2,18 +2,18 @@ var mysql = require("mysql2")
 const { mysql_log, mysql_error } = require("../logging")
 
 const db_info_start = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    port: process.env.DB_PORT,
-    password: process.env.DB_PASS
+    host: process.env.PRIVATE_DB_HOST,
+    user: process.env.PRIVATE_DB_USER,
+    port: process.env.PRIVATE_DB_PORT,
+    password: process.env.PRIVATE_DB_PASS
 }
 
 const db_info = {
-    database: process.env.DB_DATABASE,
+    database: process.env.PRIVATE_DB_DATABASE,
     ...db_info_start
 }
 
-async function initDb() {
+function initDb() {
     let con = mysql.createConnection(db_info_start)
 
 

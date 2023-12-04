@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from "svelte";
     import MainPage from "$lib/components/mainPage.svelte";
     import user from "../user";
     import Login from "$lib/components/login/login.svelte";
@@ -8,42 +9,55 @@
 
     $: isLoggedIn = $user === null ? false : true;
 
-    function logout() {
-        //user.update(val = > val = null)
-    }
+    onMount(async function() {
+        const userLoggedInStatus = async function() {
+            const res = await fetch('http://localhost:5175/api/user', {
+                method: "GET",
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json',
+                }
+            })
+            return res
+        }
+
+        const result = await userLoggedInStatus()
+        const returnedData = await result.json()
+        if (returnedData.success === true) {
+            user.update(val => val = returnedData.data)
+        } else {
+            console.log(returnedData)
+        }
+    })
 
 
 </script>
 
-<button type="button" class="btn" value="Logout" on:click={logout}> Log out </button>
 
 {#if isLoggedIn}
 
-<div class="container mt-5 bg-light rounded rounded-3 p-3">
+    <div class="container mt-5 bg-light rounded rounded-3 p-3">
 
-    
-    <MainPage
-        data = {data}
-    ></MainPage>
+        
+        <MainPage
+            data = {data}
+        ></MainPage>
 
-    {#each data.legs as routes}
-        <div>
-            {routes.routeInfo.from.name} -> {routes.routeInfo.to.name} | {routes.routeInfo.distance}
-            <br/>
-            <div style="margin-left: 2rem;">
-                Company's providing route
+        {#each data.legs as routes}
+            <div>
+                {routes.routeInfo.from.name} -> {routes.routeInfo.to.name} | {routes.routeInfo.distance}
+                <br/>
+                <div style="margin-left: 2rem;">
+                    Company's providing route
+                </div>
+
+
             </div>
+            <br/>
+        {/each}
+    </div>
 
-
-        </div>
-        <br/>
-    {/each}
-</div>
-
-{:else}
-
-    <h2>Please login to continue</h2>
-    <Login></Login>
 {/if}
 
 

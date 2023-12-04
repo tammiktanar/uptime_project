@@ -7,11 +7,13 @@ const { getUserWithEmail, getUserWithId } = require('../mysql/get/users');
 /* POST users listing. */
 router.get('/', async function(req, res, next) {
     console.log(req.body);
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5173')
+    res.header("Access-Control-Allow-Credentials", "true")
 
     const cookie = req.cookies['token']
 
     try {
-        const claims = jwt.verify(cookie, process.env.SECRET);
+        const claims = jwt.verify(cookie, process.env.PRIVATE_SECRET);
         if (!claims) res.status(401).json({success: false, error: true, message: "No auth", data: null})
 
         const user = await getUserWithId(claims.id);
