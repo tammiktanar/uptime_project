@@ -2,8 +2,6 @@ var mysql = require("mysql2/promise");
 const { db_info } = require("../db");
 
 
-
-
 async function getAllUsers() {
     let con = await mysql.createConnection(db_info)
 
@@ -16,40 +14,31 @@ async function getAllUsers() {
     return users
 }
 
-async function getUserWithId() {
+async function getUserWithId(id) {
     let con = await mysql.createConnection(db_info)
 
-    let sql = "SELECT id, username, email FROM `users`"
+    let sql = "SELECT id, username, email FROM `users` WHERE id = ?"
 
     const [users] = await con.execute(
-        sql
+        sql,
+        [id]
     );
 
     return users
 }
 
-async function getUserWithUsername() {
+
+async function getUserWithEmail(email) {
     let con = await mysql.createConnection(db_info)
 
-    let sql = "SELECT id, username, email FROM `users`"
+    let sql = "SELECT id, username, email FROM `users` WHERE email = ?"
 
     const [users] = await con.execute(
-        sql
+        sql,
+        [email]
     );
 
     return users
 }
 
-async function getUserWithEmail() {
-    let con = await mysql.createConnection(db_info)
-
-    let sql = "SELECT id, username, email FROM `users`"
-
-    const [users] = await con.execute(
-        sql
-    );
-
-    return users
-}
-
-module.exports = { getAllUsers, getUserWithId, getUserWithUsername, getUserWithEmail };
+module.exports = { getAllUsers, getUserWithId, getUserWithEmail };

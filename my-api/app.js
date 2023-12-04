@@ -6,7 +6,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
+var userRouter = require('./routes/user');
+var loginRouter = require('./routes/login');
+var logoutRouter = require('./routes/logout');
+var resgisterRouter = require('./routes/register');
+
 const { initDb } = require('./mysql/db');
 const { getAllUsers } = require('./mysql/get/users');
 
@@ -15,8 +20,16 @@ var app = express();
 initDb()
 
 app.options('*', function(req,res,next) {
-    res.header("Access-Controll-Allow-Origin", 'http://localhost:5173');
-    res.header("Access-Controll-Allow-Headers", ['X-Requested-With', 'content-type']);
+    res.header("Access-Control-Allow-Origin", 'http://localhost:5173');
+    res.header("Access-Control-Allow-Credentials", "true")
+    res.header("Access-Control-Allow-Headers", [
+        'X-Requested-With', 
+        'content-type',
+        'credentials'
+    ]);
+    res.header("Access-Control-Allow-Methods", 'GET,POST');
+    res.status(200);
+
     next()
 })
 
@@ -26,8 +39,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.set('view engine', 'ejs');
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/user', userRouter);
+app.use('/api/login', loginRouter);
+app.use('/api/logout', logoutRouter);
+app.use('/api/register', resgisterRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
