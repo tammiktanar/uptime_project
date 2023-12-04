@@ -1,5 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
+    import LoginRedirectButton from "$lib/components/loginRedirectButton.svelte";
     import user from "../user";
 
     $: isLoggedIn = $user === null? false : true;
@@ -22,12 +23,12 @@
 
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand">Uptime project</a>
+        <button class="navbar-brand btn" on:click={async() => {await goto('/')}}>Uptime project</button>
 
         {#if isLoggedIn}
             <button class="btn btn-outline-danger"  on:click={logout} type="submit">Log out</button>
         {:else}
-            <button class="btn btn-outline-success"  on:click={async() => {await goto('/login')}} type="submit"> Login </button>
+            <LoginRedirectButton></LoginRedirectButton>
         {/if}
     </div>
 </nav>

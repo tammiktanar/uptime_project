@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import MainPage from "$lib/components/mainPage.svelte";
     import user from "../user";
-    import Login from "$lib/components/login/login.svelte";
+    import LoginRedirectButton from "$lib/components/loginRedirectButton.svelte";
 
     export let data
 
@@ -26,8 +26,6 @@
         const returnedData = await result.json()
         if (returnedData.success === true) {
             user.update(val => val = returnedData.data)
-        } else {
-            console.log(returnedData)
         }
     })
 
@@ -56,6 +54,15 @@
             </div>
             <br/>
         {/each}
+    </div>
+
+{:else}
+
+    <div class="mt-5 text-center">
+        <h3>
+            Please log in to use this page
+        </h3>
+        <LoginRedirectButton></LoginRedirectButton>
     </div>
 
 {/if}
