@@ -46,10 +46,19 @@
 
     <form on:submit|preventDefault={login}>
         <div class="container bg-light border border-3 rounded-3 px-3 py-3" style="min-width: 50rem;">
-            <input class="form-control" bind:value={email} id="email" type="email"/>
-            <input class="form-control mt-3" bind:value={password} id="password" type="password"/>
+            <div class="form-floating">
+                <input class="form-control" bind:value={email} id="email" type="email" placeholder="name@example.com"/>
+                <label for="email">Email address</label>
+            </div>
+
+            <div class="form-floating">
+                <input class="form-control mt-3" bind:value={password} id="password" type="password" placeholder="password"/>
+                <label for="password">Password</label>
+            </div>  
+
             <button class="form-control btn btn-success mt-3" type="submit"> Log in </button>
-            <button class="form-control btn btn-primary mt-3" type="button" on:click={async() => {await goto('/register')}}> Register </button>
+            <button class="form-control btn btn-primary mt-3" type="button" on:click={async() => {await goto('/register')}}> Or Register </button>
+            
         </div>
     </form>
 
