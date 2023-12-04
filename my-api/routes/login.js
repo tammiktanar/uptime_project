@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
 const { getUserWithEmail } = require('../mysql/get/users');
 
 
@@ -26,7 +27,7 @@ router.post('/', async function(req, res, next) {
             return 
         }
     
-    
+
         if (users[0]["id"]) {
             const user = users[0]
 
@@ -35,8 +36,10 @@ router.post('/', async function(req, res, next) {
                 return
             }
 
+            const token = jwt.sign({id:user.id}, process.env.SECRET, {expiresIn: '24h'});
+            res.cookie('token', token, {httpOnly: true, maxAge: (24 * 60 * 60 * 1000)});
 
-            res.json({success: true, error: false, message: "User logged in", data: user})
+            res.send({success: true, error: false, message: "User logged in", data: null})
         }
 
     } catch(error) {

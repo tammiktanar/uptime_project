@@ -31,7 +31,7 @@ async function getUserWithId(id) {
 async function getUserWithEmail(email) {
     let con = await mysql.createConnection(db_info)
 
-    let sql = "SELECT id, username, email FROM `users` WHERE email = ?"
+    let sql = "SELECT id, username, email, password FROM `users` WHERE email = ?"
 
     const [users] = await con.execute(
         sql,
