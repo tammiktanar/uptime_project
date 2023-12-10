@@ -7,7 +7,6 @@
 	let y:number;
 	
 	function mouseOver(event:any) {
-        console.log('Y')
 		isHovered = true;
 		x = event.pageX + 20;
 		y = event.pageY + 20;
