@@ -35,6 +35,26 @@
         if (!reservationsCreatable) return
         if (!reservationCreation) return
         if (success) return
+        let curTime = new Date()
+
+        let validUntilDate:Date
+
+        path.forEach((route, key) => {
+            if (key == 0) {
+                validUntilDate = new Date(route.validUntil)
+            }
+
+            let curUntilDate = new Date(route.validUntil)
+
+            if (validUntilDate > curUntilDate) {
+                validUntilDate = curUntilDate
+            }
+        })
+
+        if (curTime > validUntilDate) {
+            alert("Data is past its validation time, please refresh the page")
+            return
+        }
         fetch(env.PUBLIC_API_HTTP + '://'+env.PUBLIC_API_IP+':'+env.PUBLIC_API_PORT+'/api/reservationsCreate', {
             method: 'POST',
             credentials: 'include',
@@ -155,7 +175,7 @@
                 </div>
             {:else if !reservationsCreatable}
                 <span >Created by: <p class="fw-bold">{reservation.firstName} {reservation.lastName}</p></span>
-                <span >Valid till: <p class="fw-bold">{new Date(reservation.validDate)}</p></span>
+                <span >Valid till: <p class="fw-bold">{new Date(reservation.validUntil)}</p></span>
             {/if}
         </div>
     </div>
