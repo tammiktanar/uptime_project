@@ -75,10 +75,9 @@ export function validateSortedPath(possiblePath: Route[], departAtDate: string, 
         let newPlanetflightStart = new Date(route.providers[0].flightStart).getTime()
         let newPlanetflightEnd= new Date(route.providers[0].flightEnd).getTime()
 
-        // console.log("DateCheck",curPlanetEndTime, newPlanetflightStart, newPlanetflightEnd)
 
-        if (curPlanetEndTime > newPlanetflightStart) { dateCheck = false} // If departure is after landing 
-        if (requestedEndTime < newPlanetflightEnd) { dateCheck = false} // If 
+        if (curPlanetEndTime > newPlanetflightStart) { dateCheck = false}
+        if (requestedEndTime < newPlanetflightEnd) { dateCheck = false} 
 
         curPlanetEndTime = newPlanetflightEnd
 
@@ -88,7 +87,6 @@ export function validateSortedPath(possiblePath: Route[], departAtDate: string, 
     if (requestedDistance <= traveledDistance) return false;
     if (!dateCheck) return false;
     
-    console.log("here", dateCheck)
     return true
 }
 

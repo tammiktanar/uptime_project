@@ -262,21 +262,14 @@
         seperatedPaths = []
 
         if (allStartingPlanets.some(planet => planet.name == startPlanet) && allEndingPlanets.some(planet => planet.name == endPlanet)) {
-            console.log("start")
             calculateAllPossiblePaths()
 
-
-            
             calcPaths.sort()
-
-            console.log("Seperating paths")
 
             seperatePaths()
 
             sortSeperatedPaths()
 
-            console.log("Paths calculated:", calcPaths)
-            console.log("Finished seperating:", seperatedPaths)
         }   
 
 
@@ -310,8 +303,6 @@
     }
 
     async function sortSeperatedPaths() {
-        console.log("Sorting", sortingType)
-        console.log(seperatedPaths)
         switch (sortingType) {
             case 'distance':
                 seperatedPaths.sort(sortByDistance)
@@ -337,9 +328,6 @@
             default:
                 break;
         }
-
-        console.log('Done sorting')
-        console.log(seperatedPaths)
     }
 
     // If any of the variable's change, recalculate paths
