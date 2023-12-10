@@ -11,6 +11,9 @@ var userRouter = require('./routes/user');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var resgisterRouter = require('./routes/register');
+var reservationsRouter = require('./routes/reservations/reservations');
+var reservationsCreateRouter = require('./routes/reservations/createReservation');
+var pricelistRouter = require('./routes/data/pricelist');
 
 const { initDb } = require('./mysql/db');
 const { getAllUsers } = require('./mysql/get/users');
@@ -20,8 +23,8 @@ initDb()
 
 
 app.options('*', function(req,res,next) {
-
-    res.header("Access-Control-Allow-Origin", 'http://localhost:5173');
+    
+    res.header("Access-Control-Allow-Origin", process.env.PUBLIC_SITE_HTTP+'://'+process.env.PUBLIC_SITE_IP+':'+process.env.PUBLIC_SITE_PORT);
     res.header("Access-Control-Allow-Credentials", "true")
     res.header("Access-Control-Allow-Headers", [
         'X-Requested-With', 
@@ -47,6 +50,9 @@ app.use('/api/user', userRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/logout', logoutRouter);
 app.use('/api/register', resgisterRouter);
+app.use('/api/reservations', reservationsRouter);
+app.use('/api/reservationsCreate', reservationsCreateRouter);
+app.use('/api/pricelist', pricelistRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

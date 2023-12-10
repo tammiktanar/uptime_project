@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { env } from "$env/dynamic/public";
     import MainPage from "$lib/components/mainPage.svelte";
     import user from "../user";
     import LoginRedirectButton from "$lib/components/loginRedirectButton.svelte";
@@ -11,7 +12,7 @@
 
     onMount(async function() {
         const userLoggedInStatus = async function() {
-            const res = await fetch('http://localhost:5175/api/user', {
+            const res = await fetch(env.PUBLIC_API_HTTP + '://'+env.PUBLIC_API_IP+':'+env.PUBLIC_API_PORT+'/api/user', {
                 method: "GET",
                 credentials: 'include',
                 headers: {
@@ -33,38 +34,16 @@
 </script>
 
 
-{#if isLoggedIn}
 
-    <div class="container mt-5 bg-light rounded rounded-3 p-3">
+<div class="container mt-5 bg-light rounded rounded-3 p-3 mb-5">
 
-        
-        <MainPage
-            data = {data}
-        ></MainPage>
+    
+    <MainPage
+        data = {data}
+    ></MainPage>
 
-        {#each data.legs as routes}
-            <div>
-                {routes.routeInfo.from.name} -> {routes.routeInfo.to.name} | {routes.routeInfo.distance}
-                <br/>
-                <div style="margin-left: 2rem;">
-                    Company's providing route
-                </div>
+</div>
 
 
-            </div>
-            <br/>
-        {/each}
-    </div>
-
-{:else}
-
-    <div class="mt-5 text-center">
-        <h3>
-            Please log in to use this page
-        </h3>
-        <LoginRedirectButton></LoginRedirectButton>
-    </div>
-
-{/if}
-
+<div class="mt-5 mb-5"></div>
 

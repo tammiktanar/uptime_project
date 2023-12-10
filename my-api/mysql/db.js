@@ -37,6 +37,14 @@ function initDb() {
             }
         });
 
+        con.query('SET GLOBAL max_connections = 1024;', function (error, results) {
+            if (error) {
+                mysql_error(err)
+            } else {
+                mysql_log('Database connections increased');
+            }
+        });
+
         let sql = "CREATE TABLE IF NOT EXISTS `users`" +
             " ( " +
             "    `id` int(11) NOT NULL AUTO_INCREMENT,"+
@@ -57,12 +65,17 @@ function initDb() {
             }
         );
 
-        sql = "CREATE TABLE IF NOT EXISTS `sessions`"+
-        " ( "+
-        "    `session_key` VARCHAR(255) NOT NULL, "+
-        "    `user_id` INT(11) NOT NULL, "+
-        "    `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP "+
-        " ) "
+
+        sql = "CREATE TABLE IF NOT EXISTS `reservations`" + 
+        "(" +
+            "`id` INT(11) NOT NULL AUTO_INCREMENT ," + 
+            "`validUntil` DATETIME NOT NULL ," + 
+            "`route` JSON NOT NULL ," + 
+            "`firstName` VARCHAR(255) NOT NULL ," + 
+            "`lastName` VARCHAR(255) NOT NULL ," + 
+            "`userID` INT NULL ," + 
+            "PRIMARY KEY (`id`)" + 
+        ");"
 
         con.query(
             sql, 
@@ -70,12 +83,81 @@ function initDb() {
                 if (err) {
                     mysql_error(err)
                 } else {
-                    mysql_log("Table `sessions` created");
+                    mysql_log("Table `reservations` created");
                 }
             }
         );
-        
 
+        sql = "CREATE TABLE IF NOT EXISTS `route` "+
+        "("+
+            "`id` VARCHAR(255) NOT NULL ,"+
+            "`validUntil` VARCHAR(255) NOT NULL "+
+        ")"
+
+        con.query(
+            sql, 
+            function (err, result) {
+                if (err) {
+                    mysql_error(err)
+                } else {
+                    mysql_log("Table `route` created");
+                }
+            }
+        );
+
+        sql = "CREATE TABLE IF NOT EXISTS `routeinfo` "+
+        "("+
+            "`id` VARCHAR(255) NOT NULL ,"+
+            "`route_id` VARCHAR(255) NOT NULL ,"+
+            "`from` JSON NOT NULL ,"+
+            "`to` JSON NOT NULL ,"+
+            "`distance` INT NOT NULL "+
+        ")"
+
+        con.query(
+            sql, 
+            function (err, result) {
+                if (err) {
+                    mysql_error(err)
+                } else {
+                    mysql_log("Table `routeinfo` created");
+                }
+            }
+        );
+
+        sql = "CREATE TABLE IF NOT EXISTS `providers` "+
+        "("+
+            "`id` VARCHAR(255) NOT NULL ,"+
+            "`company_id` VARCHAR(255) NOT NULL ,"+
+            "`route_id` VARCHAR(255) NOT NULL ,"+
+            "`flightStart` VARCHAR(255) NOT NULL ,"+
+            "`flightEnd` VARCHAR(255) NOT NULL ,"+
+            "`price` INT NOT NULL "+
+        ")"
+
+        con.query(
+            sql, 
+            function (err, result) {
+                if (err) {
+                    mysql_error(err)
+                } else {
+                    mysql_log("Table `providers` created");
+                }
+            }
+        );
+
+        sql = "CREATE TABLE IF NOT EXISTS `company` (`id` VARCHAR(255) NOT NULL , `name` VARCHAR(255) NOT NULL )"
+
+        con.query(
+            sql, 
+            function (err, result) {
+                if (err) {
+                    mysql_error(err)
+                } else {
+                    mysql_log("Table `company` created");
+                }
+            }
+        );
 
         con.end()
     })

@@ -1,5 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
+    import { env } from "$env/dynamic/public";
     import user from "../../user";
 
 
@@ -8,7 +9,7 @@
     let currentError = ""
 
     function login() {
-        fetch("http://localhost:5175/api/login", {
+        fetch(env.PUBLIC_API_HTTP + '://'+env.PUBLIC_API_IP+':'+env.PUBLIC_API_PORT+'/api/login', {
             method: 'POST',
             credentials: 'include',
             headers: {

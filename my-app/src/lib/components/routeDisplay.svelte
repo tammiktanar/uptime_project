@@ -1,33 +1,43 @@
 <script lang="ts">
     import type { Route } from "../../common/store";
+    import PathDisplay from "./pathDisplay.svelte";
     import PlanetIcon from "./planetIcon.svelte";
 
-    export let calcPaths: Route[][]
+    export let seperatedPaths: Route[][]
+    export let loadingData: boolean
+    export let reservationsCreatable = true
+    let showing = 15
+
+
 
 </script>
+ 
 
 
-
-<div class="mt-2 bg-secondary rounded rounded-3 p-2">
-    {#if calcPaths.length == 0}
-        <div class="text-light">
-            <h4>No route was found</h4>
-
-        </div>
+<div class="">
+    {#if loadingData}
+        <span class="text-light">Please wait, loading data</span>
     {:else}
-        {#each calcPaths as path}
+        {#if seperatedPaths.length == 0}
             <div class="text-light">
-                {#each path as route, key}
-                            {#if key == 0} 
-                                Starting planet {route.routeInfo.from.name}
-                                <PlanetIcon planet={route.routeInfo.from.name}></PlanetIcon>
+                <h4>No route was found</h4>
 
-                            {/if}
-
-                            -> {route.routeInfo.to.name}
-                {/each}
             </div>
-        {/each}
+        {:else}
+            {#each seperatedPaths.slice(0, showing) as path}
+                <PathDisplay
+                    path= {path}
+                    reservationsCreatable= {reservationsCreatable}
+                ></PathDisplay>
+            {/each}
 
+            {#if seperatedPaths.length > showing}
+                <div class="d-flex justify-content-center mt-3">
+                    <button class="btn btn-primary" on:click={() => {showing += 15}}>Show more...</button>
+                </div>
+
+
+            {/if}
+        {/if}
     {/if}
 </div>
