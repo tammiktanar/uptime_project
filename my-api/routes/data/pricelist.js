@@ -16,7 +16,7 @@ router.get('/', async function(req, res, next) {
     })
 
     if (pricelist.legs !== undefined) {
-        createData(pricelist)
+        await createData(pricelist)
     }  
 
     let saved_pricelist = await getData()
