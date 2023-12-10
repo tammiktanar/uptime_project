@@ -111,7 +111,7 @@ function initDb() {
             "`route_id` VARCHAR(255) NOT NULL ,"+
             "`from` JSON NOT NULL ,"+
             "`to` JSON NOT NULL ,"+
-            "`distance` INT NOT NULL "+
+            "`distance` BIGINT(20) NOT NULL "+
         ")"
 
         con.query(
