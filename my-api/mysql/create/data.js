@@ -3,11 +3,11 @@ const { db_info } = require("../db");
 const { getCompanyWithId, getRouteWithId, getRouteInfoWithId, getProviderWithId } = require("../get/data");
 
 async function createData(data) {
-    data.legs.forEach(async route => {
+    for (let route of data.legs) {
         await createRouteInfo(route.routeInfo, route.id)
-        route.providers.forEach(async provider => {
+        for (let provider of route.providers) {
             await createProvider(provider, route.id)
-        })
+        }
 
         let existingRoute = await getRouteWithId(route.id)
         if (existingRoute.length != 0) return
@@ -25,9 +25,7 @@ async function createData(data) {
         );
 
         con.end()
-
-
-    });
+    };
 } 
 
 async function createRouteInfo(routeInfo, routeId) {
