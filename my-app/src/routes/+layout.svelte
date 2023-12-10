@@ -24,7 +24,7 @@
 
 <nav class="navbar navbar-expand bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Uptime project</a>
+        <a class="navbar-brand" href="/">Cosmos Odyssey</a>
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
