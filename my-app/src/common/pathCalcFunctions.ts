@@ -59,36 +59,36 @@ export function validateSortedPath(possiblePath: Route[], departAtDate: string, 
     let traveledDistance = 0
     let travelPrice = 0
 
-    let sanityCheck = true // In case route has no providers (impossible, but still)
     let dateCheck = true
-    let curPlanetArrivalTime = new Date(departAtDate)
-    let requestedArrivalTime = new Date(arriveByDate)
+    let curPlanetEndTime = new Date(departAtDate).getTime()
+    let requestedEndTime = new Date(arriveByDate).getTime()
 
-    possiblePath.forEach((route: Route) => {
+    for (let route of possiblePath) {
+        if (!dateCheck) return
+
         traveledDistance += route.routeInfo.distance
 
         if (route.providers[0] && route.providers.length == 1) {
             travelPrice += route.providers[0].price
-        } else {
-            sanityCheck = false
         }
 
-        if (sanityCheck) {
-            let newPlanetDepartTime = new Date(route.providers[0].flightStart)
-            let newPlanetArrivalTime = new Date(route.providers[0].flightEnd)
+        let newPlanetflightStart = new Date(route.providers[0].flightStart).getTime()
+        let newPlanetflightEnd= new Date(route.providers[0].flightEnd).getTime()
 
-            if (curPlanetArrivalTime > newPlanetDepartTime) dateCheck = false // If departure is after landing 
-            if (requestedArrivalTime < newPlanetArrivalTime) dateCheck = false // If 
+        // console.log("DateCheck",curPlanetEndTime, newPlanetflightStart, newPlanetflightEnd)
 
-            curPlanetArrivalTime = newPlanetArrivalTime
-        }
-    })
+        if (curPlanetEndTime > newPlanetflightStart) { dateCheck = false} // If departure is after landing 
+        if (requestedEndTime < newPlanetflightEnd) { dateCheck = false} // If 
+
+        curPlanetEndTime = newPlanetflightEnd
+
+    }
 
     if (requestedPrice <= travelPrice) return false;
     if (requestedDistance <= traveledDistance) return false;
     if (!dateCheck) return false;
     
-
+    console.log("here", dateCheck)
     return true
 }
 

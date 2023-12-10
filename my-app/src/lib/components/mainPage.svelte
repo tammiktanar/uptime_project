@@ -166,7 +166,7 @@
 
 
     // Seperate all found paths from their companies, and sort it to find all possibilities
-    function seperatePaths(cur_parent_route?: Route, possiblePath?: Route[], routeIndex?:number, curPlanetIndex?: number) {
+    async function seperatePaths(cur_parent_route?: Route, possiblePath?: Route[], routeIndex?:number, curPlanetIndex?: number) {
         if (possiblePath === undefined) {
             possiblePath = []
         }
@@ -211,6 +211,8 @@
             }
 
             if (validatePath(possiblePath, startPlanet, endPlanet)) {
+                if (!validateSortedPath(possiblePath, departAtDate, arriveByDate, requestedPrice, requestedDistance)) return;   
+
                 seperatedPaths= [...seperatedPaths, possiblePath]
                 return
             }
@@ -229,7 +231,7 @@
                         let curPlanetArrivalTime = new Date(departAtDate)
                         let requestedArrivalTime = new Date(arriveByDate)
                         
-                        calcPaths[routeIndex][curPlanetIndex].providers.forEach((provider: Provider) => {
+                        calcPaths[routeIndex][curPlanetIndex].providers.forEach(async (provider: Provider) => {
                             let curRoute = {...seperatedRoute} 
                             curRoute.providers = [provider]
 
@@ -241,7 +243,7 @@
 
                             let newPath = [...<[]>possiblePath, curRoute]
 
-                            if (validateSortedPath(newPath, departAtDate, arriveByDate, requestedPrice, requestedDistance)) return;
+                            if (!validateSortedPath(newPath, departAtDate, arriveByDate, requestedPrice, requestedDistance)) return;
 
                             seperatePaths(curRoute, newPath, routeIndex, curPlanetIndex+1)
                         })
@@ -451,7 +453,6 @@
                 sortingType = "price"
             }
 
-            console.log(sortingType)
         }}
     >
         Sort by price
@@ -471,7 +472,6 @@
                 sortingType = "distance"
             }
 
-            console.log(sortingType)
         }}
     >
         Sort by distance
@@ -491,7 +491,6 @@
                 sortingType = "time"
             }
 
-            console.log(sortingType)
         }}
     >
         Sort by travel time
